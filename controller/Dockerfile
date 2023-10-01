@@ -1,8 +1,10 @@
-FROM golang:1.21
+FROM python:3.10-slim
 
-WORKDIR /go/src/github.com/xkurozaru/plant-diagnosis/controller
+WORKDIR /app
 
-COPY go.mod go.sum ./
-RUN go mod download
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
+RUN poetry install
 
-COPY . .
+COPY . /app

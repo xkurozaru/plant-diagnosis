@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "plant-diagnosis-predictor"
+name = "plant-diagnosis-controller"
 version = "0.1.0"
 description = ""
 authors = ["xkurozaru <kurozaru.210@gmail.com>"]
