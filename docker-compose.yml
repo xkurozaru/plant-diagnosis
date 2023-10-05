@@ -5,8 +5,10 @@ services:
     build: ./manager
     ports:
       - 3000:3000
-    command: yarn dev -H 0.0.0.0
+    command: yarn dev -H 0.0.0.0 -p 3000
     tty: true
+    environment:
+      TZ: $TZ
 
   predictor:
     build: ./predictor
@@ -14,6 +16,36 @@ services:
       - 5000:5000
     command: uvicorn main:app --reload --host 0.0.0.0 --port 5000
     tty: true
+    environment:
+      TZ: $TZ
+
+  controller:
+    build: ./controller
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    command: go run main.go
+    tty: true
+    environment:
+      SIGNING_KEY: $SIGNING_KEY
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_PORT: $POSTGRES_PORT
+      TZ: $TZ
+
+  db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+      TZ: $TZ
 
   nginx:
     image: nginx:latest
