@@ -38,7 +38,7 @@ func (a accountHandler) SignUp() echo.HandlerFunc {
 			return &echo.HTTPError{Code: http.StatusBadRequest, Message: err.Error()}
 		}
 
-		err = a.accountApplicationService.SignUp(req.Name, req.LoginID, req.Password)
+		err = a.accountApplicationService.SignUp(req.UserName, req.LoginID, req.Password)
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
 		}

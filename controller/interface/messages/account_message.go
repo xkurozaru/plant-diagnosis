@@ -7,7 +7,7 @@ import "github.com/xkurozaru/plant-diagnosis/controller/domain/model"
 ////////////////////////
 
 type SignUpRequest struct {
-	Name     string `json:"name"`
+	UserName string `json:"user_name"`
 	LoginID  string `json:"login_id"`
 	Password string `json:"password"`
 }
