@@ -20,7 +20,7 @@ async def index():
     return {"message": "Hello World"}
 
 
-@app.post("/api/predict/")
+@app.post("/api/predictor/predict")
 async def predict(image: UploadFile):
     if not image:
         raise HTTPException(status_code=400, detail="No image found")

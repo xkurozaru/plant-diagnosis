@@ -38,7 +38,7 @@ export default function Form() {
     setAlert(null)
 
     try {
-      const response = await axios.post(`http://localhost:8000/api/predict`, formData, {
+      const response = await axios.post(`http://localhost:5000/api/predictor/predict`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
