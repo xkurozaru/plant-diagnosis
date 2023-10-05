@@ -5,6 +5,7 @@
     "cSpell.words": [
         "fastapi",
         "labstack",
+        "sqlalchemy",
         "torchvision"
     ],
 }

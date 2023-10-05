@@ -12,6 +12,10 @@ fastapi = "^0.103.2"
 uvicorn = "^0.23.2"
 torchvision = "^0.15.2"
 python-multipart = "^0.0.6"
+sqlalchemy = "^2.0.21"
+cuid2 = "^2.0.0"
+python-jose = "^3.3.0"
+mysql-connector-python = "^8.1.0"
 
 
 [[tool.poetry.source]]
