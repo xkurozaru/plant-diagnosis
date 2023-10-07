@@ -7,22 +7,27 @@ import {
   Button,
   Image,
   Input,
-  Spinner,
   Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const placeholderImage = 'https://via.placeholder.com/512'; // プレースホルダー画像のURL
 
 export default function UploadForm() {
   const [token, setToken] = useState(Cookies.get("token"));
   const [file, setFile] = useState(null);
-  const [id, setId] = useState('');
+  const [modelId, setModelId] = useState('');
   const [responseMessage, setResponseMessage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false); // ローディング状態を管理
+  const [models, setModels] = useState([]); // モデルリストを保持
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -35,8 +40,8 @@ export default function UploadForm() {
     reader.readAsDataURL(selectedFile);
   };
 
-  const handleIdChange = (e) => {
-    setId(e.target.value);
+  const handleModelIdChange = (e) => {
+    setModelId(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -44,13 +49,13 @@ export default function UploadForm() {
 
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('id', id);
 
     try {
       setLoading(true); // リクエストが始まったらローディングを表示
-      const response = await axios.post('http://localhost:8000/api/v1/predict', formData, {
+      const response = await axios.post(`http://localhost:8000/api/v1/predict/${modelId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
         },
       });
       const responseData = response.data;
@@ -62,6 +67,20 @@ export default function UploadForm() {
       setLoading(false); // リクエストが完了したらローディングを非表示
     }
   };
+
+  // モデルリストを取得する関数
+  const fetchModels = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/v1/prediction/models');
+      setModels(response.data); // レスポンスからモデルリストをセット
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchModels(); // コンポーネントがマウントされたらモデルリストを取得
+  }, []);
 
   return (
     <Box maxW="fit-content">
@@ -82,16 +101,30 @@ export default function UploadForm() {
             <Input type="file" onChange={handleFileChange} />
           </Box>
           <Box>
-            <Input
-              type="text"
-              placeholder="ID"
-              value={id}
-              onChange={handleIdChange}
-            />
+            {/* タブを表示 */}
+            <Tabs>
+              <TabList>
+                {models.map((model) => (
+                  <Tab key={model.id}>{model.name}</Tab>
+                ))}
+              </TabList>
+              <TabPanels>
+                {models.map((model) => (
+                  <TabPanel key={model.id}>
+                    {/* タブ内のコンテンツ */}
+                    <Input
+                      type="text"
+                      placeholder="ID"
+                      value={modelId}
+                      onChange={handleModelIdChange}
+                    />
+                  </TabPanel>
+                ))}
+              </TabPanels>
+            </Tabs>
           </Box>
           <Stack spacing={10} direction="row" align="center">
-            <Button type="submit">診断開始</Button>
-            {loading && <Spinner size="xl" />}
+            <Button type="submit" onClick={handleSubmit} isLoading={loading}>診断開始</Button>
           </Stack>
         </Box>
       </form>
