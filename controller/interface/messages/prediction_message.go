@@ -32,7 +32,7 @@ type GetPredictionModelResponse struct {
 
 type PredictRequest struct {
 	ModelID string                `param:"model_id"`
-	Image   *multipart.FileHeader `form:"image"`
+	File    *multipart.FileHeader `form:"image"`
 }
 type PredictResponse struct {
 	PredictionResult PredictionResult `json:"prediction_result"`

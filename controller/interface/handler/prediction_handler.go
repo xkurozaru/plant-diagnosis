@@ -100,7 +100,12 @@ func (p predictionHandler) Predict() echo.HandlerFunc {
 			return &echo.HTTPError{Code: http.StatusBadRequest, Message: err.Error()}
 		}
 
-		predictionResult, err := p.predictionApplicationService.Predict(userID, model.ULID(req.ModelID), *req.Image)
+		req.File, err = ctx.FormFile("image")
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusBadRequest, Message: err.Error()}
+		}
+
+		predictionResult, err := p.predictionApplicationService.Predict(userID, model.ULID(req.ModelID), *req.File)
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
 		}

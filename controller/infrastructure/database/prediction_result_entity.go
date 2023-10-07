@@ -9,7 +9,7 @@ type PredictionResultEntity struct {
 	PredictionModelID string
 	PredictionModel   PredictionModelEntity `gorm:"foreignKey:PredictionModelID"`
 	Result            string
-	FileName          string
+	FilePath          string
 }
 
 func NewPredictionResultEntity(predictionResult model.PredictionResult) PredictionResultEntity {
@@ -18,7 +18,7 @@ func NewPredictionResultEntity(predictionResult model.PredictionResult) Predicti
 		UserID:            predictionResult.PredictedBy.ID.ToString(),
 		PredictionModelID: predictionResult.PredictionModel.ID.ToString(),
 		Result:            predictionResult.Result,
-		FileName:          predictionResult.FileName,
+		FilePath:          predictionResult.FilePath,
 	}
 }
 
@@ -29,6 +29,6 @@ func (p PredictionResultEntity) ToModel() model.PredictionResult {
 		PredictedBy:     p.User.ToModel(),
 		PredictionModel: p.PredictionModel.ToModel(),
 		Result:          p.Result,
-		FileName:        p.FileName,
+		FilePath:        p.FilePath,
 	}
 }

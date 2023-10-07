@@ -3,9 +3,10 @@ package model
 import "time"
 
 const (
-	DateTimeFormat  = "2006-01-02 15:04:05"
-	DateFormat      = "2006-01-02"
-	SlashDateFormat = "2006/01/02"
+	DateTimeFormat    = "2006-01-02 15:04:05"
+	DateTimeBarFormat = "2006-01-02_15:04:05"
+	DateFormat        = "2006-01-02"
+	SlashDateFormat   = "2006/01/02"
 )
 
 type DateTime time.Time
@@ -41,6 +42,18 @@ func (d DateTime) EndDay() DateTime {
 
 func (d DateTime) NextDay() DateTime {
 	return DateTime(d.StartDay().ToTime().Add(24 * time.Hour))
+}
+
+func (d DateTime) StartMonth() DateTime {
+	return DateTime(time.Date(d.ToTime().Year(), d.ToTime().Month(), 1, 0, 0, 0, 0, time.Local))
+}
+
+func (d DateTime) EndMonth() DateTime {
+	return DateTime(d.NextMonth().ToTime().Add(-1))
+}
+
+func (d DateTime) NextMonth() DateTime {
+	return DateTime(d.StartMonth().ToTime().AddDate(0, 1, 0))
 }
 
 func (d DateTime) IsBefore(compDate DateTime) bool {

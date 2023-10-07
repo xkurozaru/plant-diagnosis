@@ -25,6 +25,8 @@ services:
       - db
     ports:
       - 8000:8000
+    volumes:
+      - ./controller/_var:/app/_var
     command: go run main.go
     tty: true
     environment:
@@ -49,6 +51,10 @@ services:
 
   nginx:
     image: nginx:latest
+    depends_on:
+      - manager
+      - predictor
+      - controller
     ports:
       - 80:80
     volumes:

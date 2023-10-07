@@ -35,6 +35,7 @@ func (p PredictionModelEntity) ToModel() model.PredictionModel {
 		ID:          model.ULID(p.ID),
 		Name:        p.Name,
 		NetworkName: p.NetworkName,
+		ParamPath:   p.ParamPath,
 		Labels:      labelModels,
 	}
 }

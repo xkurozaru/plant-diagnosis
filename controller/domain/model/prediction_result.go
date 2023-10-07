@@ -6,16 +6,16 @@ type PredictionResult struct {
 	PredictedBy     User
 	PredictionModel PredictionModel
 	Result          string
-	FileName        string
+	FilePath        string
 }
 
-func NewPredictionResult(predictedBy User, predictionModel PredictionModel, result string, fileName string) PredictionResult {
+func NewPredictionResult(predictedBy User, predictionModel PredictionModel, result string, filePath string) PredictionResult {
 	return PredictionResult{
 		ID:              NewULID(),
 		PredictedAt:     DateTimeNow(),
 		PredictedBy:     predictedBy,
 		PredictionModel: predictionModel,
 		Result:          result,
-		FileName:        fileName,
+		FilePath:        filePath,
 	}
 }

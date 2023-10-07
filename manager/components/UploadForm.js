@@ -6,43 +6,52 @@ import {
   Button,
   Image,
   Input,
-  Stack,
   Tab,
   TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
+  Tabs
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 
-const placeholderImage = 'https://via.placeholder.com/512'; // プレースホルダー画像のURL
+const placeholderImage = 'https://via.placeholder.com/512';
 
 export default function UploadForm() {
   const [file, setFile] = useState(null);
-  const [modelId, setModelId] = useState('');
+  const [selectedModelId, setSelectedModelId] = useState(''); // 選択したモデルのIDを管理
+  const [selectedModelName, setSelectedModelName] = useState(''); // 選択したモデルの名前を管理
   const [responseMessage, setResponseMessage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [loading, setLoading] = useState(false); // ローディング状態を管理
-  const [models, setModels] = useState([]); // モデルリストを保持
-
-  const token = Cookies.get('token'); // CookieからTokenを取得
+  const [loading, setLoading] = useState(false);
+  const [models, setModels] = useState([]);
+  const token = Cookies.get('token');
 
   useEffect(() => {
-    // apiを呼び出してuserが取得出来なかった場合はログインページにリダイレクト
-    const response = axios.get('http://localhost:8000/api/v1/users', {
-      headers: {
-        'Authorization': 'Bearer ' + token, // 認証トークン
-        'Content-Type': 'application/json', // コンテンツタイプも指定できます
-      },
-    }).catch((error) => {
-        console.error('ユーザー名の取得に失敗しました', error);
-        window.location.href = '/login';
-      });
+    if (!token) {
+      window.location.href = '/login';
+    }
 
-    fetchModels(); // ページがロードされたらモデルリストを取得
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/v1/prediction/models', {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+        const modelData = response.data.prediction_models;
+        setModels(modelData);
+
+        if (modelData.length > 0) {
+          setSelectedModelId(modelData[0].id); // 最初のモデルのIDをデフォルトで選択
+          setSelectedModelName(modelData[0].model_name); // 最初のモデルの名前をデフォルトで選択
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [token]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -55,8 +64,9 @@ export default function UploadForm() {
     reader.readAsDataURL(selectedFile);
   };
 
-  const handleModelIdChange = (e) => {
-    setModelId(e.target.value);
+  const handleTabChange = (model) => {
+    setSelectedModelId(model.id); // タブが変更されたら選択したモデルのIDを更新
+    setSelectedModelName(model.model_name); // タブが変更されたら選択したモデルの名前を更新
   };
 
   const handleSubmit = async (e) => {
@@ -66,35 +76,19 @@ export default function UploadForm() {
     formData.append('image', file);
 
     try {
-      setLoading(true); // リクエストが始まったらローディングを表示
-      const response = await axios.post(`http://localhost:8000/api/v1/prediction/predict/${modelId}`, formData, {
+      setLoading(true);
+      const response = await axios.post(`http://localhost:8000/api/v1/prediction/predict/${selectedModelId}`, formData, {
         headers: {
-          'Authorization': 'Bearer ' + token, // 認証トークン
-          'Content-Type': 'application/json', // コンテンツタイプも指定できます
+          'Authorization': 'Bearer ' + token,
         },
       });
       const responseData = response.data;
-      setResponseMessage(responseData.message);
+      setResponseMessage(responseData.prediction_result.result);
     } catch (error) {
       console.error(error);
       setResponseMessage('エラーが発生しました');
     } finally {
-      setLoading(false); // リクエストが完了したらローディングを非表示
-    }
-  };
-
-  // モデルリストを取得する関数
-  const fetchModels = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/v1/prediction/models', {
-        headers: {
-          'Authorization': 'Bearer ' + token, // 認証トークン
-          'Content-Type': 'application/json', // コンテンツタイプも指定できます
-        },
-      });
-      setModels(response.data); // レスポンスからモデルリストをセット
-    } catch (error) {
-      console.error(error);
+      setLoading(false);
     }
   };
 
@@ -102,7 +96,7 @@ export default function UploadForm() {
     <Box maxW="fit-content">
       <form onSubmit={handleSubmit}>
         {responseMessage && (
-        <Alert status={responseMessage === 'Success' ? 'success' : 'error'}>
+        <Alert status={responseMessage != 'エラーが発生しました' ? 'success' : 'error'}>
           <AlertIcon />
           <AlertTitle>{responseMessage}</AlertTitle>
         </Alert>
@@ -112,36 +106,24 @@ export default function UploadForm() {
             <Image src={imagePreview} alt="プレビュー" boxSize="224" borderRadius="10%" />
           ) : (
             <Image src={placeholderImage} alt="プレースホルダー" boxSize="224" borderRadius="10%" />
-              )}
+          )}
           <Box>
             <Input type="file" onChange={handleFileChange} />
           </Box>
-          <Box>
-            {/* タブを表示 */}
+          <Box marginTop={4}>
             <Tabs>
               <TabList>
                 {models.map((model) => (
-                  <Tab key={model.id}>{model.name}</Tab>
+                  <Tab key={model.id} onClick={() => handleTabChange(model)}>
+                    {model.model_name}
+                  </Tab>
                 ))}
               </TabList>
-              <TabPanels>
-                {models.map((model) => (
-                  <TabPanel key={model.id}>
-                    {/* タブ内のコンテンツ */}
-                    <Input
-                      type="text"
-                      placeholder="ID"
-                      value={modelId}
-                      onChange={handleModelIdChange}
-                    />
-                  </TabPanel>
-                ))}
-              </TabPanels>
             </Tabs>
           </Box>
-          <Stack spacing={10} direction="row" align="center">
-            <Button type="submit" onClick={handleSubmit} isLoading={loading}>診断開始</Button>
-          </Stack>
+          <Box marginTop={4}>
+            <Button type="submit" colorScheme='teal' variant='solid' size="lg" onClick={handleSubmit} isLoading={loading}>診断開始</Button>
+          </Box>
         </Box>
       </form>
     </Box>

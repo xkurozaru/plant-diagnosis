@@ -19,7 +19,7 @@ var JwtConfig = echojwt.Config{
 func GenerateToken(userID model.ULID) (string, error) {
 	claims := jwt.MapClaims{
 		"userID": userID.ToString(),
-		"exp":    time.Now().Add(time.Hour).Unix(),
+		"exp":    time.Now().Add(time.Hour * 24 * 365).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
