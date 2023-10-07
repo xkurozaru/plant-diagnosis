@@ -1,16 +1,16 @@
-import Header from "@/components/header";
-import { Container, Heading } from "@chakra-ui/react";
-import { Router } from "next/router";
+import Header from "@/components/Header";
+import { Box, Heading } from "@chakra-ui/react";
+import axios from "axios";
 import AuthForm from "../components/AuthForm";
 
 const SignupPage = () => {
   const handleSignup = async (userData) => {
     // サインアップ処理を実装する
     try {
-      const response = await axios.post(`http://localhost:8000/api/sign-up`, userData);
+      const response = await axios.post(`http://localhost:8000/api/v1/sign-up`, userData);
       console.log("サインアップ成功:", response.data);
       // サインアップが成功した場合の処理を追加
-      Router.push("/login"); // サインアップ後にログインページに遷移
+      window.location.href = "/login";
 
     } catch (error) {
       console.log("サインアップエラー:", error);
@@ -19,13 +19,15 @@ const SignupPage = () => {
   };
 
   return (
-    <Container maxW="sm" centerContent>
+    <Box>
       <Header />
-      <Heading as="h2" size="xl" mt={8}>
-        サインアップ
-      </Heading>
-      <AuthForm onSubmit={handleSignup} buttonText="サインアップ" />
-    </Container>
+      <Box paddingLeft={10} marginTop={4}>
+        <Heading as="h2" size="xl" marginBottom={4}>
+          サインアップ
+        </Heading>
+        <AuthForm onSubmit={handleSignup} buttonText="サインアップ" />
+      </Box>
+    </Box>
   );
 };
 

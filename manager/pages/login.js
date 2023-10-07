@@ -1,35 +1,36 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import axios from "axios";
 import Cookies from "js-cookie"; // js-cookieをインポート
-import { Router } from "next/router";
 import AuthForm from "../components/AuthForm";
+import Header from "../components/Header";
 
 const LoginPage = () => {
   const handleLogin = async (userData) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/sign-in", userData);
-      const { token } = response.data; // レスポンスからJWTを取得
+      const response = await axios.post("http://localhost:8000/api/v1/sign-in", userData);
+      const { token } = response.data.token; // レスポンスからJWTを取得
 
       // JWTをCookieに保存
       Cookies.set("token", token);
 
-      console.log("ログイン成功:", response.data);
       // ログインが成功した場合の処理を追加
-      Router.push("/"); // ログイン後にトップページに遷移
+      window.location.href = "/";
 
     } catch (error) {
-      console.error("ログインエラー:", error.response.data);
       // ログインが失敗した場合のエラー処理を追加
     }
   };
 
   return (
-    <Container maxW="sm" centerContent>
-      <Heading as="h2" size="xl" mt={8}>
-        ログイン
-      </Heading>
-      <AuthForm onSubmit={handleLogin} buttonText="ログイン" hideUsernameField={true} />
-    </Container>
+    <Box>
+      <Header />
+      <Box paddingLeft={10} marginTop={4}>
+        <Heading as="h2" size="xl" marginBottom={4}>
+          ログイン
+        </Heading>
+        <AuthForm onSubmit={handleLogin} buttonText="ログイン" hideUsernameField={true} />
+      </Box>
+    </Box>
   );
 };
 

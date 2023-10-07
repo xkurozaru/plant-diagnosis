@@ -15,7 +15,7 @@ const AuthForm = ({ onSubmit, buttonText, hideUsernameField = false }) => {
   };
 
   return (
-    <Box>
+    <Box maxW="fit-content">
       <form onSubmit={handleSubmit}>
         {!hideUsernameField && (
           <FormControl>

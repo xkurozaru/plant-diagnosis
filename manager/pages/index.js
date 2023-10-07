@@ -1,12 +1,14 @@
+import UploadForm from "@/components/UploadForm";
 import { Box } from "@chakra-ui/react";
-import Form from "../components/form";
-import Header from "../components/header";
+import Header from "../components/Header";
+import useAuth from "../hooks/useAuth";
 
 export default function Home() {
+  useAuth();
   return (
     <Box>
       <Header />
-      <Form />
+      <UploadForm />
     </Box>
   );
 };

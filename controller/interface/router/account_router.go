@@ -6,6 +6,8 @@ import (
 )
 
 func InitAccountRouter(e *echo.Echo, handler handler.AccountHandler) {
-	e.POST("/account/sign-up", handler.SignUp())
-	e.POST("/account/sign-in", handler.SignIn())
+	api := e.Group("/api/v1")
+
+	api.POST("/sign-up", handler.SignUp())
+	api.POST("/sign-in", handler.SignIn())
 }
