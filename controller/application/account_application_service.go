@@ -1,6 +1,8 @@
 package application
 
 import (
+	"fmt"
+
 	"github.com/xkurozaru/plant-diagnosis/controller/domain/model"
 	"github.com/xkurozaru/plant-diagnosis/controller/domain/repository"
 )
@@ -35,6 +37,15 @@ func (a accountApplicationService) SignUp(name string, loginID string, password 
 	auth, err := model.NewAuthentication(user, password)
 	if err != nil {
 		return err
+	}
+
+	exists, err := a.userRepository.ExistsByLoginID(loginID)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		return fmt.Errorf("This loginID User already exists")
 	}
 
 	err = a.userRepository.Create(user)

@@ -4,6 +4,7 @@ import (
 	"github.com/xkurozaru/plant-diagnosis/controller/domain/model"
 	"github.com/xkurozaru/plant-diagnosis/controller/domain/repository"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type predictionModelDatabase struct {
@@ -27,7 +28,7 @@ func (p predictionModelDatabase) Create(predictionModel model.PredictionModel) e
 
 func (p predictionModelDatabase) FindAll() ([]model.PredictionModel, error) {
 	predictionModelEs := []PredictionModelEntity{}
-	err := p.db.Preload("PredictionLabels").Find(&predictionModelEs).Error
+	err := p.db.Preload(clause.Associations).Find(&predictionModelEs).Error
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +44,7 @@ func (p predictionModelDatabase) FindAll() ([]model.PredictionModel, error) {
 
 func (p predictionModelDatabase) Find(ID model.ULID) (model.PredictionModel, error) {
 	predictionModelE := PredictionModelEntity{}
-	err := p.db.Preload("PredictionLabels").First(&predictionModelE, ID.ToString()).Error
+	err := p.db.Preload(clause.Associations).Where("id = ?", ID.ToString()).First(&predictionModelE).Error
 	if err != nil {
 		return model.PredictionModel{}, err
 	}

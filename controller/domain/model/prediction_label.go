@@ -1,7 +1,5 @@
 package model
 
-import "sort"
-
 type PredictionLabel struct {
 	ID                ULID
 	PredictionModelID ULID
@@ -12,8 +10,6 @@ type PredictionLabel struct {
 type PredictionLabels []PredictionLabel
 
 func NewPredictionLabels(labels []string, predictionModelID ULID) PredictionLabels {
-	sort.Strings(labels)
-
 	predictionLabels := make(PredictionLabels, len(labels))
 	for i, label := range labels {
 		predictionLabels[i] = PredictionLabel{

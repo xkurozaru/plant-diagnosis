@@ -1,0 +1,9 @@
+POST /api/v1/sign-up HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+
+{
+    "user_name": "てすとゆーざー",
+    "login_id": "test",
+    "password": "test1234"
+}

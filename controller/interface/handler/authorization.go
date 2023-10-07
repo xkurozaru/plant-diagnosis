@@ -12,13 +12,13 @@ import (
 )
 
 var JwtConfig = echojwt.Config{
-	ContextKey: "userID",
+	ContextKey: "user",
 	SigningKey: []byte(os.Getenv("SIGNING_KEY")),
 }
 
 func GenerateToken(userID model.ULID) (string, error) {
 	claims := jwt.MapClaims{
-		"userID": userID,
+		"userID": userID.ToString(),
 		"exp":    time.Now().Add(time.Hour).Unix(),
 	}
 
@@ -28,10 +28,20 @@ func GenerateToken(userID model.ULID) (string, error) {
 }
 
 func GetUserID(ctx echo.Context) (model.ULID, error) {
-	userID, ok := ctx.Get("userID").(model.ULID)
+	token, ok := ctx.Get(JwtConfig.ContextKey).(*jwt.Token)
 	if !ok {
-		return "", errors.New("invalid token")
+		return model.ULID(""), errors.New("failed to get userID from context")
 	}
 
-	return userID, nil
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return model.ULID(""), errors.New("failed to get userID from context")
+	}
+
+	userID, ok := claims["userID"].(string)
+	if !ok {
+		return model.ULID(""), errors.New("failed to get userID from context")
+	}
+
+	return model.ULID(userID), nil
 }

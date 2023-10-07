@@ -1,0 +1,4 @@
+GET /api/v1/users HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTY2OTc1NTQsInVzZXJJRCI6IjAxaGM1NmhnazFqdDY1OGQxZjRtYnhlYnB4In0.BvLPxkIAn8H9WdKONY-JwrRhh7EiZwT3M760glP3C40

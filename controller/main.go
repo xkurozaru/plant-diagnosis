@@ -18,6 +18,7 @@ func main() {
 	e.Use(middleware.CORS())
 
 	router.InitAccountRouter(e, reg.NewAccountHandler())
+	router.InitPredictionRouter(e, reg.NewPredictionHandler())
 
 	e.Logger.Fatal(e.Start(":8000"))
 }

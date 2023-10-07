@@ -8,18 +8,19 @@ export default function Header() {
   const [userName, setUserName] = useState(null);
 
   useEffect(() => {
-    // CookieからTokenを取得するロジックを実装
+    // CookieからTokenを取得
     const token = Cookies.get("token");
 
     if (token) {
       // Tokenがある場合はAPIを呼び出してユーザー名を取得
-      axios.get("http://localhost:8000/users", {
+      axios.get("http://localhost:8000/api/v1/users", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': 'Bearer ' + token, // 認証トークン
+          'Content-Type': 'application/json', // コンテンツタイプも指定できます
         },
       })
       .then((response) => {
-        setUserName(response.data.name);
+        setUserName(response.data.user.name);
       })
       .catch((error) => {
         console.error("ユーザー名の取得に失敗しました", error);

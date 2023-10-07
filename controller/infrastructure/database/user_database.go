@@ -43,3 +43,14 @@ func (u userDatabase) FindByLoginID(loginID string) (model.User, error) {
 
 	return userE.ToModel(), nil
 }
+
+func (u userDatabase) ExistsByLoginID(loginID string) (bool, error) {
+	userEs := []UserEntity{}
+
+	err := u.db.Where("login_id = ?", loginID).Find(&userEs).Error
+	if err != nil {
+		return false, err
+	}
+
+	return len(userEs) > 0, nil
+}

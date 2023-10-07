@@ -1,6 +1,6 @@
 import { Box, Heading } from "@chakra-ui/react";
 import axios from "axios";
-import Cookies from "js-cookie"; // js-cookieをインポート
+import Cookies from "js-cookie";
 import AuthForm from "../components/AuthForm";
 import Header from "../components/Header";
 
@@ -8,7 +8,7 @@ const LoginPage = () => {
   const handleLogin = async (userData) => {
     try {
       const response = await axios.post("http://localhost:8000/api/v1/sign-in", userData);
-      const { token } = response.data.token; // レスポンスからJWTを取得
+      const token  = response.data.token; // レスポンスからJWTを取得
 
       // JWTをCookieに保存
       Cookies.set("token", token);
