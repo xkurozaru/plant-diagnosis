@@ -4,7 +4,9 @@
     },
     "cSpell.words": [
         "fastapi",
+        "gorm",
         "labstack",
-        "torchvision"
+        "torchvision",
+        "xkurozaru"
     ],
 }

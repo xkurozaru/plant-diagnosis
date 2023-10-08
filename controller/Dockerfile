@@ -1,10 +1,7 @@
-FROM python:3.10-slim
+FROM golang:1.21
 
-WORKDIR /app
+RUN mkdir -p $GOPATH/app/
+WORKDIR $GOPATH/app
 
-COPY pyproject.toml poetry.lock ./
-RUN pip install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install
-
-COPY . /app
+COPY . $GOPATH/app
+RUN go mod tidy
