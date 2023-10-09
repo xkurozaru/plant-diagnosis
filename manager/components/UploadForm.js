@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const placeholderImage = 'https://via.placeholder.com/512';
@@ -25,10 +26,22 @@ export default function UploadForm() {
   const [loading, setLoading] = useState(false);
   const [models, setModels] = useState([]);
   const token = Cookies.get('token');
+  const router = useRouter();
 
   useEffect(() => {
-    if (!token) {
-      window.location.href = '/login';
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/v1/users', {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+        // エラーが発生した場合に/loginにリダイレクト
+        router.push('/login');
+      }
     }
 
     const fetchData = async () => {
@@ -50,6 +63,7 @@ export default function UploadForm() {
       }
     };
 
+    fetchUser();
     fetchData();
   }, [token]);
 
