@@ -136,7 +136,7 @@ export default function UploadForm() {
             </Tabs>
           </Box>
           <Box marginTop={4}>
-            <Button type="submit" colorScheme='teal' variant='solid' size="lg" onClick={handleSubmit} isLoading={loading}>診断開始</Button>
+            <Button type="submit" colorScheme='teal' variant='solid' size="lg" onClick={handleSubmit} isLoading={loading} loadingText="診断中">診断開始</Button>
           </Box>
         </Box>
       </form>
