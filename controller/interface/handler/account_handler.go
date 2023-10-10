@@ -12,6 +12,7 @@ import (
 
 type AccountHandler interface {
 	SignUp() echo.HandlerFunc
+	SignUpAdmin() echo.HandlerFunc
 	SignIn() echo.HandlerFunc
 	GetUser() echo.HandlerFunc
 }
@@ -39,6 +40,25 @@ func (a accountHandler) SignUp() echo.HandlerFunc {
 		}
 
 		err = a.accountApplicationService.SignUp(req.UserName, req.LoginID, req.Password)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
+		}
+
+		return ctx.JSON(http.StatusOK, res)
+	}
+}
+
+func (a accountHandler) SignUpAdmin() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		var req messages.SignUpRequest
+		var res messages.SignUpResponse
+
+		err := ctx.Bind(&req)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusBadRequest, Message: err.Error()}
+		}
+
+		err = a.accountApplicationService.SignUpAdmin(req.UserName, req.LoginID, req.Password)
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
 		}
