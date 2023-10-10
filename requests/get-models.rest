@@ -1,4 +1,6 @@
+###
+# @prompt token
 GET /api/v1/prediction/models HTTP/1.1
 Host: localhost:8000
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTY3MDU1NDUsInVzZXJJRCI6IjAxaGM1NmhnazFqdDY1OGQxZjRtYnhlYnB4In0.LqRbI7pNRt27yCyowTuOd5vmyv6Wwe0Cm5mGjuuZKpc
+Authorization: Bearer {{token}}
