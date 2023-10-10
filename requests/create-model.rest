@@ -1,7 +1,9 @@
+###
+# @prompt token
 POST /api/v1/prediction/models HTTP/1.1
 Host: localhost:8000
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTY2OTQ2OTIsInVzZXJJRCI6IjAxaGM1NmhnazFqdDY1OGQxZjRtYnhlYnB4In0.MuqZr7KEMzQmuEk9KRM6b5KikvlkXwHPIAtaFYpwBYg
+Authorization: Bearer {{token}}
 
 {
     "model_name": "なす識別機v1",
