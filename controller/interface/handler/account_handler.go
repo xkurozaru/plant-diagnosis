@@ -106,11 +106,7 @@ func (a accountHandler) GetUser() echo.HandlerFunc {
 			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
 		}
 
-		res.User = messages.UserMessage{
-			ID:      user.ID.ToString(),
-			Name:    user.Name,
-			LoginID: user.LoginID,
-		}
+		res.User = messages.NewUserMessage(user)
 
 		return ctx.JSON(http.StatusOK, res)
 	}

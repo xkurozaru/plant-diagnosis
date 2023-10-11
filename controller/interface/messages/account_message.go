@@ -34,6 +34,7 @@ type UserMessage struct {
 	ID      string `json:"id"`
 	Name    string `json:"name"`
 	LoginID string `json:"login_id"`
+	Role    string `json:"role"`
 }
 
 func NewUserMessage(u model.User) UserMessage {
@@ -41,5 +42,6 @@ func NewUserMessage(u model.User) UserMessage {
 		ID:      u.ID.ToString(),
 		Name:    u.Name,
 		LoginID: u.LoginID,
+		Role:    u.Role.Type,
 	}
 }
