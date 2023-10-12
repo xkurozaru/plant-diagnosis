@@ -10,6 +10,7 @@ func InitAccountRouter(e *echo.Echo, accountHandler handler.AccountHandler) {
 	api := e.Group("/api/v1")
 
 	api.POST("/sign-up", accountHandler.SignUp())
+	api.POST("/sign-up-admin", accountHandler.SignUpAdmin())
 	api.POST("/sign-in", accountHandler.SignIn())
 
 	u := api.Group("/users")

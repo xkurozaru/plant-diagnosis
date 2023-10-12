@@ -51,3 +51,14 @@ func (p predictionModelDatabase) Find(ID model.ULID) (model.PredictionModel, err
 
 	return predictionModelE.ToModel(), nil
 }
+
+func (p predictionModelDatabase) Delete(predictionModel model.PredictionModel) error {
+	predictionModelE := NewPredictionModelEntity(predictionModel)
+
+	err := p.db.Unscoped().Delete(&predictionModelE).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

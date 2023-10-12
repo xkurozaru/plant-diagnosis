@@ -43,6 +43,11 @@ type GetPredictionResultsResponse struct {
 	PredictionResults []PredictionResult `json:"prediction_results"`
 }
 
+type DeletePredictionModelRequest struct {
+	ModelID string `param:"model_id"`
+}
+type DeletePredictionModelResponse struct{}
+
 ///////////
 // Model //
 ///////////
