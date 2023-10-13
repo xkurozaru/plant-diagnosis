@@ -27,7 +27,7 @@ func (a authenticationDatabase) Create(authentication model.Authentication) erro
 
 func (a authenticationDatabase) FindByUserID(userID model.ULID) (model.Authentication, error) {
 	authenticationE := AuthenticationEntity{}
-	err := a.db.First(&authenticationE, "user_id = ?", userID.ToString()).Error
+	err := a.db.Where("user_id = ?", userID.ToString()).First(&authenticationE).Error
 	if err != nil {
 		return model.Authentication{}, err
 	}

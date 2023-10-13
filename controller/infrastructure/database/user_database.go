@@ -26,7 +26,7 @@ func (u userDatabase) Create(user model.User) error {
 
 func (u userDatabase) Find(ID model.ULID) (model.User, error) {
 	userE := UserEntity{}
-	err := u.db.First(&userE, "id = ?", ID).Error
+	err := u.db.Where("id = ?", ID.ToString()).First(&userE).Error
 	if err != nil {
 		return model.User{}, err
 	}
@@ -36,7 +36,7 @@ func (u userDatabase) Find(ID model.ULID) (model.User, error) {
 
 func (u userDatabase) FindByLoginID(loginID string) (model.User, error) {
 	userE := UserEntity{}
-	err := u.db.First(&userE, "login_id = ?", loginID).Error
+	err := u.db.Where("login_id = ?", loginID).First(&userE).Error
 	if err != nil {
 		return model.User{}, err
 	}
