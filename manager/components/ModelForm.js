@@ -42,10 +42,21 @@ const ModelForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setModelData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    // ラベルの場合、特別な処理を追加
+    if (name === 'labels') {
+      // カンマで区切られたラベルを配列に分割
+      const labelsArray = value.split(',');
+      setModelData((prevData) => ({
+        ...prevData,
+        labels: labelsArray, // ラベルを配列に設定
+      }));
+    } else {
+      setModelData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   return (
@@ -77,6 +88,15 @@ const ModelForm = () => {
           type="text"
           name="param_path"
           value={modelData.param_path}
+          onChange={handleChange}
+        />
+      </Box>
+      <Box>
+        <Text>ラベル (カンマで区切って入力):</Text>
+        <Input
+          type="text"
+          name="labels"
+          value={modelData.labels.join(',')} // 配列をカンマ区切りの文字列に変換
           onChange={handleChange}
         />
       </Box>
