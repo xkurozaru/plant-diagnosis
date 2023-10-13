@@ -95,6 +95,7 @@ const ModelForm = ({ updateModelList }) => {
           name="model_name"
           value={modelData.model_name}
           onChange={handleChange}
+          required
         />
       </Box>
       <Box>
@@ -104,6 +105,7 @@ const ModelForm = ({ updateModelList }) => {
           name="network_name"
           value={modelData.network_name}
           onChange={handleChange}
+          required
         />
       </Box>
       <Box>
@@ -113,6 +115,7 @@ const ModelForm = ({ updateModelList }) => {
           name="param_path"
           value={modelData.param_path}
           onChange={handleChange}
+          required
         />
       </Box>
       <Box>
@@ -122,6 +125,7 @@ const ModelForm = ({ updateModelList }) => {
           name="labels"
           value={modelData.labels.join(',')} // 配列をカンマ区切りの文字列に変換
           onChange={handleChange}
+          required
         />
       </Box>
       <Button colorScheme='teal' variant='solid' size="lg" onClick={sendRequest} isLoading={loading} loadingText="モデル作成中">モデル作成</Button>
