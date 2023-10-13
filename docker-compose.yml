@@ -5,7 +5,7 @@ services:
     build: ./manager
     ports:
       - 3000:3000
-    command: yarn dev -H 0.0.0.0 -p 3000
+    command: yarn start -H 0.0.0.0 -p 3000
     tty: true
     environment:
       TZ: $TZ

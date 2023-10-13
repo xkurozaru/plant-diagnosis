@@ -32,7 +32,7 @@ export default function UploadForm() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/users', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/v1/users`, {
           headers: {
             'Authorization': 'Bearer ' + token,
           },
@@ -47,7 +47,7 @@ export default function UploadForm() {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/prediction/models', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/models`, {
           headers: {
             'Authorization': 'Bearer ' + token,
           },
@@ -92,7 +92,7 @@ export default function UploadForm() {
 
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:8000/api/v1/prediction/predict/${selectedModelId}`, formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/predict/${selectedModelId}`, formData, {
         headers: {
           'Authorization': 'Bearer ' + token,
         },

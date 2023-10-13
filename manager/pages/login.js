@@ -11,7 +11,7 @@ const LoginPage = () => {
   const handleLogin = async (userData) => {
     setErrorAlert(false); // リクエストを送信する前にアラートを隠す
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/sign-in", userData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/api/v1/sign-in`, userData);
       const token  = response.data.token; // レスポンスからJWTを取得
 
       // JWTをCookieに保存
