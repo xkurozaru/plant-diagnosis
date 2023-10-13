@@ -14,4 +14,5 @@ func InitPredictionRouter(e *echo.Echo, predictionHandler handler.PredictionHand
 	api.GET("/prediction/models", predictionHandler.GetPredictionModels())
 	api.GET("/prediction/models/:model_id", predictionHandler.GetPredictionModel())
 	api.POST("/prediction/predict/:model_id", predictionHandler.Predict())
+	api.DELETE("/prediction/models/:model_id", predictionHandler.DeletePredictionModel())
 }
