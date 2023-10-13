@@ -1,8 +1,10 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Heading } from "@chakra-ui/react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useState } from "react";
 import AuthForm from "../components/AuthForm";
 import Header from "../components/Header";
+
 
 const LoginPage = () => {
   const [errorAlert, setErrorAlert] = useState(false);

@@ -15,6 +15,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+
 const placeholderImage = 'https://via.placeholder.com/512';
 
 export default function UploadForm() {
