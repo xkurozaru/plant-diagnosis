@@ -14,6 +14,7 @@ type PredictionHandler interface {
 	GetPredictionModels() echo.HandlerFunc
 	GetPredictionModel() echo.HandlerFunc
 	Predict() echo.HandlerFunc
+	DeletePredictionModel() echo.HandlerFunc
 }
 
 type predictionHandler struct {
@@ -57,6 +58,9 @@ func (p predictionHandler) GetPredictionModels() echo.HandlerFunc {
 		var res messages.GetPredictionModelsResponse
 
 		userID, err := GetUserID(ctx)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
+		}
 
 		predictionModels, err := p.predictionApplicationService.GetPredictionModels(userID)
 		if err != nil {
