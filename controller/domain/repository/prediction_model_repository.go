@@ -6,4 +6,5 @@ type PredictionModelRepository interface {
 	Create(model.PredictionModel) error
 	FindAll() ([]model.PredictionModel, error)
 	Find(ID model.ULID) (model.PredictionModel, error)
+	Delete(model model.PredictionModel) error
 }

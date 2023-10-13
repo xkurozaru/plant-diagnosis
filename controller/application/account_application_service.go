@@ -9,6 +9,7 @@ import (
 
 type AccountApplicationService interface {
 	SignUp(name string, loginID string, password string) error
+	SignUpAdmin(name string, loginID string, password string) error
 	SignIn(loginID string, password string) (model.User, error)
 	GetUser(userID model.ULID) (model.User, error)
 }
@@ -45,7 +46,40 @@ func (a accountApplicationService) SignUp(name string, loginID string, password 
 	}
 
 	if exists {
-		return fmt.Errorf("This loginID User already exists")
+		return fmt.Errorf("this loginID user already exists")
+	}
+
+	err = a.userRepository.Create(user)
+	if err != nil {
+		return err
+	}
+
+	err = a.authenticationRepository.Create(auth)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (a accountApplicationService) SignUpAdmin(name string, loginID string, password string) error {
+	user, err := model.NewAdminUser(loginID, name)
+	if err != nil {
+		return err
+	}
+
+	auth, err := model.NewAuthentication(user, password)
+	if err != nil {
+		return err
+	}
+
+	exists, err := a.userRepository.ExistsByLoginID(loginID)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		return fmt.Errorf("this loginID user already exists")
 	}
 
 	err = a.userRepository.Create(user)

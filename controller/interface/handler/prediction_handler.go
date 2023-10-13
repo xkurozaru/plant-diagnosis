@@ -14,6 +14,7 @@ type PredictionHandler interface {
 	GetPredictionModels() echo.HandlerFunc
 	GetPredictionModel() echo.HandlerFunc
 	Predict() echo.HandlerFunc
+	DeletePredictionModel() echo.HandlerFunc
 }
 
 type predictionHandler struct {
@@ -33,12 +34,17 @@ func (p predictionHandler) CreatePredictionModel() echo.HandlerFunc {
 		var req messages.CreatePredictionModelRequest
 		var res messages.CreatePredictionModelResponse
 
-		err := ctx.Bind(&req)
+		userID, err := GetUserID(ctx)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
+		}
+
+		err = ctx.Bind(&req)
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusBadRequest, Message: err.Error()}
 		}
 
-		err = p.predictionApplicationService.CreatePredictionModel(req.ModelName, req.NetworkName, req.ParamPath, req.Labels)
+		err = p.predictionApplicationService.CreatePredictionModel(userID, req.ModelName, req.NetworkName, req.ParamPath, req.Labels)
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
 		}
@@ -51,7 +57,12 @@ func (p predictionHandler) GetPredictionModels() echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		var res messages.GetPredictionModelsResponse
 
-		predictionModels, err := p.predictionApplicationService.GetPredictionModels()
+		userID, err := GetUserID(ctx)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
+		}
+
+		predictionModels, err := p.predictionApplicationService.GetPredictionModels(userID)
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
 		}
@@ -69,12 +80,17 @@ func (p predictionHandler) GetPredictionModel() echo.HandlerFunc {
 		var req messages.GetPredictionModelRequest
 		var res messages.GetPredictionModelResponse
 
-		err := ctx.Bind(&req)
+		userID, err := GetUserID(ctx)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
+		}
+
+		err = ctx.Bind(&req)
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusBadRequest, Message: err.Error()}
 		}
 
-		predictionModel, err := p.predictionApplicationService.GetPredictionModel(model.ULID(req.ModelID))
+		predictionModel, err := p.predictionApplicationService.GetPredictionModel(userID, model.ULID(req.ModelID))
 		if err != nil {
 			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
 		}
@@ -111,6 +127,30 @@ func (p predictionHandler) Predict() echo.HandlerFunc {
 		}
 
 		res.PredictionResult = messages.NewPredictionResult(predictionResult)
+
+		return ctx.JSON(http.StatusOK, res)
+	}
+}
+
+func (p predictionHandler) DeletePredictionModel() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		var req messages.DeletePredictionModelRequest
+		var res messages.DeletePredictionModelResponse
+
+		userID, err := GetUserID(ctx)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
+		}
+
+		err = ctx.Bind(&req)
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusBadRequest, Message: err.Error()}
+		}
+
+		err = p.predictionApplicationService.DeletePredictionModel(userID, model.ULID(req.ModelID))
+		if err != nil {
+			return &echo.HTTPError{Code: http.StatusInternalServerError, Message: err.Error()}
+		}
 
 		return ctx.JSON(http.StatusOK, res)
 	}

@@ -43,7 +43,7 @@ func (p predictionResultDatabase) FindByUserID(userID model.ULID) ([]model.Predi
 
 func (p predictionResultDatabase) Find(ID model.ULID) (model.PredictionResult, error) {
 	predictionResultE := PredictionResultEntity{}
-	err := p.preloads().First(&predictionResultE, ID.ToString()).Error
+	err := p.preloads().Where("id = ?", ID.ToString()).First(&predictionResultE).Error
 	if err != nil {
 		return model.PredictionResult{}, err
 	}

@@ -1,6 +1,7 @@
 package application
 
 import (
+	"fmt"
 	"mime/multipart"
 
 	"github.com/xkurozaru/plant-diagnosis/controller/domain/model"
@@ -9,11 +10,12 @@ import (
 )
 
 type PredictionApplicationService interface {
-	CreatePredictionModel(modelName string, networkName string, paramPath string, labels []string) error
-	GetPredictionModels() ([]model.PredictionModel, error)
-	GetPredictionModel(modelID model.ULID) (model.PredictionModel, error)
+	CreatePredictionModel(userID model.ULID, modelName string, networkName string, paramPath string, labels []string) error
+	GetPredictionModels(userID model.ULID) ([]model.PredictionModel, error)
+	GetPredictionModel(userID model.ULID, modelID model.ULID) (model.PredictionModel, error)
 	Predict(userID model.ULID, modelID model.ULID, file multipart.FileHeader) (model.PredictionResult, error)
 	GetPredictionResults(userID model.ULID) ([]model.PredictionResult, error)
+	DeletePredictionModel(userID model.ULID, modelID model.ULID) error
 }
 
 type predictionApplicationService struct {
@@ -37,9 +39,21 @@ func NewPredictionApplicationService(
 	}
 }
 
-func (p predictionApplicationService) CreatePredictionModel(modelName string, networkName string, paramPath string, labels []string) error {
-	predictionModel := model.NewPredictionModel(modelName, networkName, paramPath, labels)
-	err := p.predictionModelRepository.Create(predictionModel)
+func (p predictionApplicationService) CreatePredictionModel(userID model.ULID, modelName string, networkName string, paramPath string, labels []string) error {
+	user, err := p.userRepository.Find(userID)
+	if err != nil {
+		return err
+	}
+
+	if !user.Role.HasPermission(model.CreatePredictionModelPermission) {
+		return fmt.Errorf("permission denied to create prediction model")
+	}
+
+	predictionModel, err := model.NewPredictionModel(modelName, networkName, paramPath, labels)
+	if err != nil {
+		return err
+	}
+	err = p.predictionModelRepository.Create(predictionModel)
 	if err != nil {
 		return err
 	}
@@ -47,7 +61,16 @@ func (p predictionApplicationService) CreatePredictionModel(modelName string, ne
 	return nil
 }
 
-func (p predictionApplicationService) GetPredictionModels() ([]model.PredictionModel, error) {
+func (p predictionApplicationService) GetPredictionModels(userID model.ULID) ([]model.PredictionModel, error) {
+	user, err := p.userRepository.Find(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !user.Role.HasPermission(model.ReadPredictionModelPermission) {
+		return nil, fmt.Errorf("permission denied to read prediction models")
+	}
+
 	predictionModels, err := p.predictionModelRepository.FindAll()
 	if err != nil {
 		return nil, err
@@ -56,7 +79,16 @@ func (p predictionApplicationService) GetPredictionModels() ([]model.PredictionM
 	return predictionModels, nil
 }
 
-func (p predictionApplicationService) GetPredictionModel(modelID model.ULID) (model.PredictionModel, error) {
+func (p predictionApplicationService) GetPredictionModel(userID model.ULID, modelID model.ULID) (model.PredictionModel, error) {
+	user, err := p.userRepository.Find(userID)
+	if err != nil {
+		return model.PredictionModel{}, err
+	}
+
+	if !user.Role.HasPermission(model.ReadPredictionModelPermission) {
+		return model.PredictionModel{}, fmt.Errorf("permission denied to read prediction model")
+	}
+
 	predictionModel, err := p.predictionModelRepository.Find(modelID)
 	if err != nil {
 		return model.PredictionModel{}, err
@@ -69,6 +101,10 @@ func (p predictionApplicationService) Predict(userID model.ULID, modelID model.U
 	user, err := p.userRepository.Find(userID)
 	if err != nil {
 		return model.PredictionResult{}, err
+	}
+
+	if !user.Role.HasPermission(model.PredictionPermission) {
+		return model.PredictionResult{}, fmt.Errorf("permission denied to predict")
 	}
 
 	predictionModel, err := p.predictionModelRepository.Find(modelID)
@@ -96,4 +132,27 @@ func (p predictionApplicationService) GetPredictionResults(userID model.ULID) ([
 	}
 
 	return predictionResults, nil
+}
+
+func (p predictionApplicationService) DeletePredictionModel(userID model.ULID, modelID model.ULID) error {
+	user, err := p.userRepository.Find(userID)
+	if err != nil {
+		return err
+	}
+
+	if !user.Role.HasPermission(model.DeletePredictionModelPermission) {
+		return fmt.Errorf("permission denied to delete prediction model")
+	}
+
+	predictionModel, err := p.predictionModelRepository.Find(modelID)
+	if err != nil {
+		return err
+	}
+
+	err = p.predictionModelRepository.Delete(predictionModel)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
