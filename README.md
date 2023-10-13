@@ -20,4 +20,4 @@
 ## リモート
 * Google Compute Engine にデプロイしています
 * テストユーザー `LoginID:"test" Password:"test1234"`
-* http://34.105.35.51
+* http://plant-diagnosis.ddo.jp
