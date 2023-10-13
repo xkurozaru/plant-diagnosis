@@ -16,7 +16,7 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/users', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/v1/users`, {
           headers: {
             'Authorization': 'Bearer ' + token,
           },
@@ -37,7 +37,7 @@ const AdminPage = () => {
 
   const updateModelList = async () => {
     try {
-      const url = 'http://localhost:8000/api/v1/prediction/models';
+      const url = `${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/models`;
       const response = await axios.get(url, {
         headers: {
           'Content-Type': 'application/json',

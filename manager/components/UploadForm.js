@@ -15,6 +15,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+
 const placeholderImage = 'https://via.placeholder.com/512';
 
 export default function UploadForm() {
@@ -31,7 +32,7 @@ export default function UploadForm() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/users', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/v1/users`, {
           headers: {
             'Authorization': 'Bearer ' + token,
           },
@@ -46,7 +47,7 @@ export default function UploadForm() {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/prediction/models', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/models`, {
           headers: {
             'Authorization': 'Bearer ' + token,
           },
@@ -91,7 +92,7 @@ export default function UploadForm() {
 
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:8000/api/v1/prediction/predict/${selectedModelId}`, formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/predict/${selectedModelId}`, formData, {
         headers: {
           'Authorization': 'Bearer ' + token,
         },
