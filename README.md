@@ -1,10 +1,17 @@
 # Plant Disease Diagnosis Service
+
+## Requirements
+* docker
+* make
+* go-migration
+
 ## Getting Start
 1. `make up` で起動します
-2. migrationが済んでいない場合は `make migrate-up` でマイグレーションします
-3. `localhost` にアクセスします
-4. localで立ち上げた場合にはユーザーが居ないので、右上の **新規登録** からユーザーを登録します
-5. 葉の画像から病害を識別できます
+2. `localhost` にアクセスします
+3. Memberユーザーを作成するには *新規登録* から, Adminユーザーを作成するには `sign-up-admin.rest` のリクエストを送信してください
+4. ログインIDとパスワードを入力してログインします
+5. 識別モデルを作成するには `localhost/admin` から, もしくは `create-model.rest` のリクエストを送信してください
+6. 葉表画像をアップロードして病害を診断できます
 
 ## 終了時
 `make down` でアプリケーションを終了します
