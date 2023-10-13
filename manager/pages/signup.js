@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
-import { Box, Heading } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Heading } from "@chakra-ui/react";
 import axios from "axios";
+import { useState } from "react";
 import AuthForm from "../components/AuthForm";
 
 const SignupPage = () => {

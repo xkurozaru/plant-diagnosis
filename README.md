@@ -10,5 +10,5 @@
 `make down` でアプリケーションを終了します
 
 ## リモート
-* AWS EC2 にデプロイしています
+* Google Compute Engine にデプロイしています
 * テストユーザー `LoginID:"test" Password:"test1234"`
