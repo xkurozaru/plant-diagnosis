@@ -6,6 +6,7 @@
         "fastapi",
         "gorm",
         "labstack",
+        "resty",
         "torchvision",
         "xkurozaru"
     ],
