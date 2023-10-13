@@ -11,7 +11,7 @@ const SignupPage = () => {
     setErrorAlert(false); // リクエストを送信する前にアラートを隠す
     // サインアップ処理を実装する
     try {
-      const response = await axios.post(`http://localhost:8000/api/v1/sign-up`, userData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/api/v1/sign-up`, userData);
       console.log("サインアップ成功:", response.data);
       // サインアップが成功した場合の処理を追加
       window.location.href = "/login";

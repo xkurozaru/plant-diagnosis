@@ -19,7 +19,7 @@ const ModelForm = ({ updateModelList }) => {
     setLoading(true);
     setSuccessAlert(false); // リクエストを送信する前にアラートを隠す
     setErrorAlert(false); // リクエストを送信する前にアラートを隠す
-    const url = 'http://localhost:8000/api/v1/prediction/models';
+    const url = `${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/models`;
     try {
       const response = await axios.post(url, modelData, {
         headers: {

@@ -13,7 +13,7 @@ export default function Header() {
 
     if (token) {
       // Tokenがある場合はAPIを呼び出してユーザー名を取得
-      axios.get("http://localhost:8000/api/v1/users", {
+      axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/v1/users`, {
         headers: {
           'Authorization': 'Bearer ' + token, // 認証トークン
           'Content-Type': 'application/json', // コンテンツタイプも指定できます

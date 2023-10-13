@@ -13,7 +13,7 @@ const ModelList = ({ models, setModels }) => {
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        const url = 'http://localhost:8000/api/v1/prediction/models';
+        const url = `${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/models`;
         const response = await axios.get(url, {
           headers: {
             'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const ModelList = ({ models, setModels }) => {
     setErrorAlert(false); // リクエストを送信する前にアラートを隠す
 
     try {
-      const url = `http://localhost:8000/api/v1/prediction/models/${modelId}`;
+      const url = `${process.env.NEXT_PUBLIC_HOST}/api/v1/prediction/models/${modelId}`;
       const response = await axios.delete(url, {
         headers: {
           'Content-Type': 'application/json',
