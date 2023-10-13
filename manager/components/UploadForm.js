@@ -122,7 +122,7 @@ export default function UploadForm() {
             <Image src={placeholderImage} alt="プレースホルダー" boxSize="224" borderRadius="10%" />
           )}
           <Box>
-            <Input type="file" onChange={handleFileChange} />
+            <Input type="file" onChange={handleFileChange} required />
           </Box>
           <Box marginTop={4}>
             <Tabs>

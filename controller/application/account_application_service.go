@@ -46,7 +46,7 @@ func (a accountApplicationService) SignUp(name string, loginID string, password 
 	}
 
 	if exists {
-		return fmt.Errorf("This loginID User already exists")
+		return fmt.Errorf("this loginID user already exists")
 	}
 
 	err = a.userRepository.Create(user)
@@ -79,7 +79,7 @@ func (a accountApplicationService) SignUpAdmin(name string, loginID string, pass
 	}
 
 	if exists {
-		return fmt.Errorf("This loginID User already exists")
+		return fmt.Errorf("this loginID user already exists")
 	}
 
 	err = a.userRepository.Create(user)

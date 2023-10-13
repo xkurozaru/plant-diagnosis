@@ -4,7 +4,10 @@ import axios from "axios";
 import AuthForm from "../components/AuthForm";
 
 const SignupPage = () => {
+  const [errorAlert, setErrorAlert] = useState(false);
+
   const handleSignup = async (userData) => {
+    setErrorAlert(false); // リクエストを送信する前にアラートを隠す
     // サインアップ処理を実装する
     try {
       const response = await axios.post(`http://localhost:8000/api/v1/sign-up`, userData);
@@ -15,12 +18,19 @@ const SignupPage = () => {
     } catch (error) {
       console.log("サインアップエラー:", error);
       // サインアップが失敗した場合のエラー処理を追加
+      setErrorAlert(true); // エラーアラートを表示
     }
   };
 
   return (
     <Box>
       <Header />
+      {errorAlert && (
+        <Alert status="error">
+          <AlertIcon />
+          そのログインIDは既に使われています
+        </Alert>
+      )}
       <Box paddingLeft={10} marginTop={4}>
         <Heading as="h2" size="xl" marginBottom={4}>
           サインアップ
