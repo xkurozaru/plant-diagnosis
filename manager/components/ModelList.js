@@ -1,7 +1,8 @@
-import { Alert, AlertIcon, Box, Button, Text, VStack } from '@chakra-ui/react';
+import { Alert, AlertIcon, Button, Card, CardBody, CardFooter, CardHeader, Heading, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+
 
 
 const ModelList = ({ models, setModels }) => {
@@ -86,11 +87,17 @@ const ModelList = ({ models, setModels }) => {
         <Text>データを読み込んでいます...</Text>
       ) : (
         models.map((model) => (
-          <Box key={model.id} borderWidth="1px" p={4} borderRadius="md">
-            <Text fontSize="lg">{model.model_name}</Text>
-            <Text style={{ whiteSpace: 'pre-wrap' }}>ラベル: {model.labels.join(', ')}</Text>
-            <Button onClick={() => deleteModel(model.id)}>モデルを削除</Button>
-          </Box>
+          <Card key={model.id} borderRadius="md" maxW="lg">
+            <CardHeader>
+              <Heading size="md">{model.model_name}</Heading>
+            </CardHeader>
+            <CardBody>
+              <Text style={{ whiteSpace: 'pre-wrap' }}>ラベル: {model.labels.join(', ')}</Text>
+            </CardBody>
+            <CardFooter>
+              <Button colorScheme="red" onClick={() => deleteModel(model.id)}>モデル削除</Button>
+            </CardFooter>
+          </Card>
         ))
       )}
     </VStack>
