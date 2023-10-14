@@ -25,11 +25,11 @@ const AuthForm = ({ onSubmit, buttonText, hideUsernameField = false }) => {
         )}
         <FormControl mt={4}>
           <FormLabel>ログインID</FormLabel>
-          <Input type="text" name="login_id" required />
+          <Input type="text" name="login_id" required minLength={4} maxLength={32} />
         </FormControl>
         <FormControl mt={4}>
           <FormLabel>パスワード</FormLabel>
-          <Input type="password" name="password" required />
+          <Input type="password" name="password" required minLength={8} maxLength={72} />
         </FormControl>
         <Button colorScheme="teal" mt={4} type="submit">
           {buttonText}
