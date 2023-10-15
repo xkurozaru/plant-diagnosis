@@ -123,10 +123,10 @@ export default function UploadForm() {
             <Image src={placeholderImage} alt="プレースホルダー" boxSize="224" borderRadius="10%" />
           )}
           <Box>
-            <Input type="file" onChange={handleFileChange} required />
+            <Input type="file" onChange={handleFileChange} required accept=".png, .jpg, .jpeg" />
           </Box>
           <Box marginTop={4}>
-            <Tabs>
+            <Tabs isFitted variant="solid-rounded" colorScheme="cyan">
               <TabList>
                 {models.map((model) => (
                   <Tab key={model.id} onClick={() => handleTabChange(model)}>

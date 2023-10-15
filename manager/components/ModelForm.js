@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Box, Button, Input, Text, VStack } from '@chakra-ui/react';
+import { Alert, AlertIcon, Button, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
@@ -88,8 +88,8 @@ const ModelForm = ({ updateModelList }) => {
       <Text fontSize="xl" fontWeight="bold">
         モデル作成
       </Text>
-      <Box>
-        <Text>モデル名</Text>
+      <FormControl>
+        <FormLabel>モデル名</FormLabel>
         <Input
           type="text"
           name="model_name"
@@ -97,9 +97,9 @@ const ModelForm = ({ updateModelList }) => {
           onChange={handleChange}
           required
         />
-      </Box>
-      <Box>
-        <Text>ネットワーク名</Text>
+      </FormControl>
+      <FormControl>
+        <FormLabel>ネットワーク名</FormLabel>
         <Input
           type="text"
           name="network_name"
@@ -107,9 +107,9 @@ const ModelForm = ({ updateModelList }) => {
           onChange={handleChange}
           required
         />
-      </Box>
-      <Box>
-        <Text>パラメーターパス</Text>
+      </FormControl>
+      <FormControl>
+        <FormLabel>パラメーターパス</FormLabel>
         <Input
           type="text"
           name="param_path"
@@ -117,9 +117,9 @@ const ModelForm = ({ updateModelList }) => {
           onChange={handleChange}
           required
         />
-      </Box>
-      <Box>
-        <Text>ラベル(カンマで区切って入力)</Text>
+      </FormControl>
+      <FormControl>
+        <FormLabel>ラベル(カンマで区切って入力)</FormLabel>
         <Input
           type="text"
           name="labels"
@@ -127,7 +127,7 @@ const ModelForm = ({ updateModelList }) => {
           onChange={handleChange}
           required
         />
-      </Box>
+      </FormControl>
       <Button colorScheme='teal' variant='solid' size="lg" onClick={sendRequest} isLoading={loading} loadingText="モデル作成中">モデル作成</Button>
     </VStack>
   );
