@@ -16,8 +16,3 @@
 
 ## 終了時
 `make down` でアプリケーションを終了します
-
-## リモート
-* Google Compute Engine にデプロイしています
-* テストユーザー `LoginID:"test" Password:"test1234"`
-* http://plant-diagnosis.ddo.jp
